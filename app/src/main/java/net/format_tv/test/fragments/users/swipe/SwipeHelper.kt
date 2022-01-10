@@ -8,6 +8,10 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SwipeHelper: RecyclerView.OnItemTouchListener {
 
@@ -48,18 +52,32 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
             MotionEvent.ACTION_MOVE -> {
                 val dY = e.rawY - initY
 
-                if(dY in MIN_SWIPE_Y..MAX_SWIPE_Y+START_SWIPE_Y) {
-                    rv.translationY = dY - START_SWIPE_Y
-                    updateProgress(dY - START_SWIPE_Y)
-                }
-                else {
-                    animateY(rv, 0, rv.translationY, MAX_SWIPE_Y)
-                    updateProgress(MAX_SWIPE_Y)
-                }
+                if(!pb!!.indeterminateMode)
+                    if(dY in MIN_SWIPE_Y..MAX_SWIPE_Y+START_SWIPE_Y) {
+                        rv.translationY = dY - START_SWIPE_Y
+                        updateProgress(dY - START_SWIPE_Y)
+                    }
+                    else
+                        animateY(rv, 0, rv.translationY, MAX_SWIPE_Y)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                if(rv.translationY != 0f)
+                if(rv.translationY == MAX_SWIPE_Y) {
+                    if (!pb!!.indeterminateMode)
+                        indeterminateProgress()
+                }
+                else if(rv.translationY != 0f)
                     animateY(rv, 500, rv.translationY, 0f)
+            }
+        }
+    }
+
+    private fun indeterminateProgress(){
+        this.pb?.indeterminateMode = true
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(3000)
+            launch(Dispatchers.Main) {
+                pb?.indeterminateMode = false
+                animateY(recyclerView!!, 500, recyclerView!!.translationY, 0f)
             }
         }
     }
