@@ -13,7 +13,7 @@ import net.format_tv.test.fragments.users.adapter.UsersRecyclerViewAdapter
 import net.format_tv.test.fragments.users.swipe.SwipeHelper
 import net.format_tv.test.models.Users
 
-class UsersFragment: Fragment(), UsersViewModel.LoadUserListener {
+class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.UpdateListener {
 
     private lateinit var binding: FragmentUsersBinding
     private lateinit var viewModel: UsersViewModel
@@ -41,6 +41,11 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener {
         binding.recycler.adapter = UsersRecyclerViewAdapter(requireContext(), users)
         getSwipeHelper().attachRecyclerView(binding.recycler)
         getSwipeHelper().attachProgressBar(binding.progress)
+        getSwipeHelper().setUpdateListener(this)
+    }
+
+    override fun onUpdate(flag: Boolean) {
+        println(flag)
     }
 
     private fun getSwipeHelper(): SwipeHelper{
