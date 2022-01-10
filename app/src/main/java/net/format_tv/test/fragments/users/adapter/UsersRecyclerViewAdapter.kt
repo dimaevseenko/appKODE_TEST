@@ -10,7 +10,12 @@ import net.format_tv.test.databinding.RecyclerViewUserItemBinding
 import net.format_tv.test.models.User
 import net.format_tv.test.models.Users
 
-class UsersRecyclerViewAdapter(private val context: Context, private val users: Users): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
+class UsersRecyclerViewAdapter(private val context: Context, var users: Users): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
+
+    fun updateUsers(newUsers: Users){
+        this.users = newUsers
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersRecyclerViewAdapter.ViewHolder {
         return ViewHolder(LayoutInflater.from(context).inflate(R.layout.recycler_view_user_item, parent, false))

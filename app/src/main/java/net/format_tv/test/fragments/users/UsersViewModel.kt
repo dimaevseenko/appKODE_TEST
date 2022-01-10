@@ -21,7 +21,17 @@ class UsersViewModel: ViewModel() {
         return usersLiveData.value
     }
 
+    fun updateUsers(listener: LoadUserListener? = null){
+        Loader().apply {
+            loadUsers {
+                users -> usersLiveData.value = users
+                listener?.onUpdated(usersLiveData.value!!)
+            }
+        }
+    }
+
     interface LoadUserListener{
         fun onLoaded(users: Users)
+        fun onUpdated(users: Users)
     }
 }

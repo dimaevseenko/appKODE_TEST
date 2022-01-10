@@ -23,6 +23,7 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Up
     private lateinit var viewModel: UsersViewModel
 
     private var updateSwipe: SwipeHelper? = null
+    private var recyclerViewAdapter: UsersRecyclerViewAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentUsersBinding.bind(inflater.inflate(R.layout.fragment_users, container, false))
@@ -42,19 +43,28 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Up
         binding.la.visibility = View.GONE
 
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
-        binding.recycler.adapter = UsersRecyclerViewAdapter(requireContext(), users)
+        binding.recycler.adapter = getAdapter(users)
         getSwipeHelper().attachRecyclerView(binding.recycler)
         getSwipeHelper().attachProgressBar(binding.progress)
         getSwipeHelper().setUpdateListener(this)
     }
 
     override fun onUpdate() {
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(3000)
-            launch(Dispatchers.Main){
-                getSwipeHelper().indeterminateProgress(false)
-            }
-        }
+        viewModel.updateUsers(this)
+    }
+
+    override fun onUpdated(users: Users) {
+        getSwipeHelper().indeterminateProgress(false)
+        getAdapter().updateUsers(users)
+    }
+
+    private fun getAdapter(users: Users = Users()): UsersRecyclerViewAdapter{
+        if(recyclerViewAdapter == null)
+            recyclerViewAdapter = UsersRecyclerViewAdapter(
+                requireContext(),
+                users
+            )
+        return recyclerViewAdapter!!
     }
 
     private fun getSwipeHelper(): SwipeHelper{
