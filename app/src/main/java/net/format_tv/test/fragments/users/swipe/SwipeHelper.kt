@@ -54,7 +54,7 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
                 val dY = e.rawY - initY
 
                 if(pb != null)
-                    if(!pb!!.indeterminateMode)
+                    if(!pb!!.indeterminateMode && rv.translationY >= 0)
                         if(dY in MIN_SWIPE_Y..MAX_SWIPE_Y+START_SWIPE_Y) {
                             animateY(rv, 0, rv.translationY,dY - START_SWIPE_Y)
                         }
