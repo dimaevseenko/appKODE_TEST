@@ -1,6 +1,5 @@
 package net.format_tv.test.fragments.users.swipe
 
-import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.view.MotionEvent
 import android.view.View

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import net.format_tv.test.R
 import net.format_tv.test.databinding.FragmentUsersBinding
+import net.format_tv.test.fragments.error.ErrorFragment
+import net.format_tv.test.fragments.main.MainFragment
 import net.format_tv.test.fragments.users.adapter.UsersRecyclerViewAdapter
 import net.format_tv.test.fragments.users.swipe.SwipeHelper
 import net.format_tv.test.models.Users
@@ -41,6 +44,10 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
     }
 
     override fun onLoaded(users: Users) {
+       loadView(users)
+    }
+
+    fun loadView(users: Users = Users()){
         binding.la.stopShimmer()
         binding.la.hideShimmer()
         binding.la.visibility = View.GONE
@@ -56,6 +63,16 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
     override fun onUpdated(users: Users) {
         getSwipeHelper().indeterminateProgress(false)
         getAdapter().updateUsers(users)
+    }
+
+    override fun onFailure() {
+        parentFragment?.let {
+            it.parentFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.fragmentContainerView, ErrorFragment().apply { dest = {
+                    onUpdate()
+                    loadView()
+                } }).commit()
+        }
     }
 
     private fun getAdapter(users: Users = Users()): UsersRecyclerViewAdapter{

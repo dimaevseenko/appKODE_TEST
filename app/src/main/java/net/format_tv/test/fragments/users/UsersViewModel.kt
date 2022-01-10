@@ -14,7 +14,10 @@ class UsersViewModel: ViewModel() {
             Loader().apply {
                 loadUsers {
                     users -> usersLiveData.value = users
-                    listener?.onLoaded(usersLiveData.value!!)
+                    if(usersLiveData.value == null)
+                        listener?.onFailure()
+                    else
+                        listener?.onLoaded(usersLiveData.value!!)
                 }
             }
 
@@ -24,13 +27,18 @@ class UsersViewModel: ViewModel() {
     fun updateUsers(listener: LoadUserListener? = null){
         Loader().apply {
             loadUsers {
-                users -> usersLiveData.value = users
-                listener?.onUpdated(usersLiveData.value!!)
+                users ->
+                usersLiveData.value = users
+                if(usersLiveData.value == null)
+                    listener?.onFailure()
+                else
+                    listener?.onUpdated(usersLiveData.value!!)
             }
         }
     }
 
     interface LoadUserListener{
+        fun onFailure()
         fun onLoaded(users: Users)
         fun onUpdated(users: Users)
     }
