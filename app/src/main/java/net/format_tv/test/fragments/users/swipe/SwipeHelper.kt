@@ -52,18 +52,21 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
             MotionEvent.ACTION_MOVE -> {
                 val dY = e.rawY - initY
 
-                if(!pb!!.indeterminateMode)
-                    if(dY in MIN_SWIPE_Y..MAX_SWIPE_Y+START_SWIPE_Y) {
-                        rv.translationY = dY - START_SWIPE_Y
-                        updateProgress(dY - START_SWIPE_Y)
-                    }
-                    else
-                        animateY(rv, 0, rv.translationY, MAX_SWIPE_Y)
+                if(pb != null)
+                    if(!pb!!.indeterminateMode)
+                        if(dY in MIN_SWIPE_Y..MAX_SWIPE_Y+START_SWIPE_Y) {
+                            animateY(rv, 0, rv.translationY,dY - START_SWIPE_Y)
+                        }
+                        else
+                            animateY(rv, 0, rv.translationY, MAX_SWIPE_Y)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if(rv.translationY == MAX_SWIPE_Y) {
-                    if (!pb!!.indeterminateMode)
-                        indeterminateProgress()
+                    if(pb != null)
+                        if(!pb!!.indeterminateMode)
+                            indeterminateProgress()
+                    else
+                            animateY(recyclerView!!, 500, recyclerView!!.translationY, 0f)
                 }
                 else if(rv.translationY != 0f)
                     animateY(rv, 500, rv.translationY, 0f)
