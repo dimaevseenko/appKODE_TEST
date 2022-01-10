@@ -8,10 +8,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mikhaellopez.circularprogressbar.CircularProgressBar
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class SwipeHelper: RecyclerView.OnItemTouchListener {
 
@@ -21,7 +17,7 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
 
     private var recyclerView: RecyclerView? = null
     private var pb: CircularProgressBar? = null
-    private var updateListener: UpdateListener? = null
+    private var updateListener: SwipeListener? = null
 
     private var initY = 0f
 
@@ -35,7 +31,7 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
         this.pb!!.progressMax = MAX_SWIPE_Y
     }
 
-    fun setUpdateListener(updateListener: UpdateListener){
+    fun setSwipeListener(updateListener: SwipeListener){
         this.updateListener = updateListener
     }
 
@@ -108,7 +104,7 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
 
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
 
-    interface UpdateListener{
+    interface SwipeListener{
         fun onUpdate()
     }
 }
