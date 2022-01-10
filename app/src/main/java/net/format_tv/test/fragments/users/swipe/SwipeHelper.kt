@@ -79,11 +79,14 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
         }
     }
 
-    private fun indeterminateProgress(flag: Boolean){
+    fun indeterminateProgress(flag: Boolean){
         this.pb?.indeterminateMode = flag
+
         if(!flag)
             animateY(recyclerView!!, 500, recyclerView!!.translationY, 0f)
-        updateListener?.onUpdate(flag)
+
+        if(flag)
+            updateListener?.onUpdate()
     }
 
     private fun updateProgress(newValue: Float){
@@ -106,6 +109,6 @@ class SwipeHelper: RecyclerView.OnItemTouchListener {
     override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {}
 
     interface UpdateListener{
-        fun onUpdate(flag: Boolean)
+        fun onUpdate()
     }
 }

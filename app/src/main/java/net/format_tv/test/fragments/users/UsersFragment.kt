@@ -7,6 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import net.format_tv.test.R
 import net.format_tv.test.databinding.FragmentUsersBinding
 import net.format_tv.test.fragments.users.adapter.UsersRecyclerViewAdapter
@@ -44,8 +48,13 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Up
         getSwipeHelper().setUpdateListener(this)
     }
 
-    override fun onUpdate(flag: Boolean) {
-        println(flag)
+    override fun onUpdate() {
+        CoroutineScope(Dispatchers.Default).launch {
+            delay(3000)
+            launch(Dispatchers.Main){
+                getSwipeHelper().indeterminateProgress(false)
+            }
+        }
     }
 
     private fun getSwipeHelper(): SwipeHelper{
