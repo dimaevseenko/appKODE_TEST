@@ -34,7 +34,10 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Up
         viewModel = ViewModelProvider(requireActivity()).get(UsersViewModel::class.java)
         viewModel.getUsers(this)?.let { onLoaded(it) }
         binding.la.startShimmer()
-        getSwipeHelper()
+
+        getSwipeHelper().attachRecyclerView(binding.recycler)
+        getSwipeHelper().attachProgressBar(binding.progress)
+        getSwipeHelper().setUpdateListener(this)
     }
 
     override fun onLoaded(users: Users) {
@@ -44,9 +47,6 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Up
 
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = getAdapter(users)
-        getSwipeHelper().attachRecyclerView(binding.recycler)
-        getSwipeHelper().attachProgressBar(binding.progress)
-        getSwipeHelper().setUpdateListener(this)
     }
 
     override fun onUpdate() {
