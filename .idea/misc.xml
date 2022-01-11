@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bottom_sort_shape.xml" value="0.234375" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.14990942028985507" />
+        <entry key="app/src/main/res/layout/dialog_sort.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_failure.xml" value="0.27909973501754265" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.375" />
         <entry key="app/src/main/res/layout/fragment_user.xml" value="0.1911231884057971" />

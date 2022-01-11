@@ -20,7 +20,7 @@ import net.format_tv.test.fragments.users.adapter.UsersRecyclerViewAdapter
 import net.format_tv.test.fragments.users.swipe.SwipeHelper
 import net.format_tv.test.models.Users
 
-class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.SwipeListener {
+open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.SwipeListener {
 
     private lateinit var binding: FragmentUsersBinding
     private lateinit var viewModel: UsersViewModel
@@ -35,7 +35,7 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel = ViewModelProvider(requireActivity()).get(UsersViewModel::class.java)
-        viewModel.getUsers(this)?.let { onLoaded(it) }
+        viewModel.getUsers(this, getCategory())?.let { onLoaded(it) }
         binding.la.startShimmer()
 
         getSwipeHelper().attachRecyclerView(binding.recycler)
@@ -57,7 +57,7 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
     }
 
     override fun onUpdate() {
-        viewModel.updateUsers(this)
+        viewModel.updateUsers(this, getCategory())
     }
 
     override fun onUpdated(users: Users) {
@@ -75,11 +75,16 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
         }
     }
 
+    open fun getCategory(): String{
+        return "all"
+    }
+
     private fun getAdapter(users: Users = Users()): UsersRecyclerViewAdapter{
         if(recyclerViewAdapter == null)
             recyclerViewAdapter = UsersRecyclerViewAdapter(
                 requireContext(),
-                users
+                users,
+                (parentFragment as MainFragment).getSortType()
             )
         return recyclerViewAdapter!!
     }
@@ -88,5 +93,9 @@ class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.Sw
         if(updateSwipe == null)
             updateSwipe = SwipeHelper()
         return updateSwipe!!
+    }
+
+    enum class SortType{
+        ALPHABET, DATE
     }
 }

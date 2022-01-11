@@ -7,14 +7,33 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import net.format_tv.test.R
 import net.format_tv.test.databinding.RecyclerViewUserItemBinding
+import net.format_tv.test.fragments.users.UsersFragment
 import net.format_tv.test.models.User
 import net.format_tv.test.models.Users
+import java.util.*
 
-class UsersRecyclerViewAdapter(private val context: Context, var users: Users): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
+class UsersRecyclerViewAdapter(private val context: Context, var users: Users, val sortType: UsersFragment.SortType): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
 
     fun updateUsers(newUsers: Users){
-        this.users = newUsers
+        this.users = sort(newUsers)
         notifyDataSetChanged()
+    }
+
+    private fun sort(users: Users): Users{
+        val u = Users()
+        users.forEach { user ->
+            u.add(user)
+        }
+        if (sortType == UsersFragment.SortType.ALPHABET){
+            Collections.sort(u) { o1, o2 ->
+                o1!!.firstName.compareTo(o2!!.firstName)
+            }
+        }
+        return u
+    }
+
+    init {
+        this.users = sort(users)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UsersRecyclerViewAdapter.ViewHolder {
