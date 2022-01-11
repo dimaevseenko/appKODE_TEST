@@ -1,6 +1,9 @@
 package net.format_tv.test.fragments.main
 
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -40,7 +43,17 @@ class MainFragment: Fragment(){
 
     fun setSortType(sortType: UsersFragment.SortType){
         this.sortType = sortType
-        binding.mainViewPager.adapter = getMainViewPagerAdapter()
+
+        if(sortType == UsersFragment.SortType.DATE)
+            binding.imageButtonSort.setColorFilter(Color.parseColor("#6534FF"))
+        else
+            binding.imageButtonSort.colorFilter = null
+
+        getCurrentViewPagerItemFragment()?.updateSort()
+    }
+
+    fun getCurrentViewPagerItemFragment(): UsersFragment?{
+        return (binding.mainViewPager.adapter as MainViewPagerAdapter).getFragment(binding.mainViewPager.currentItem)
     }
 
     private fun sort(){

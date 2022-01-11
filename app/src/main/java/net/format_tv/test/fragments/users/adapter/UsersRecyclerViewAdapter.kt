@@ -12,7 +12,7 @@ import net.format_tv.test.models.User
 import net.format_tv.test.models.Users
 import java.util.*
 
-class UsersRecyclerViewAdapter(private val context: Context, var users: Users, val sortType: UsersFragment.SortType): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
+class UsersRecyclerViewAdapter(private val context: Context, var users: Users, var sortType: UsersFragment.SortType): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
 
     fun updateUsers(newUsers: Users){
         this.users = sort(newUsers)
@@ -28,6 +28,8 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
             Collections.sort(u) { o1, o2 ->
                 o1!!.firstName.compareTo(o2!!.firstName)
             }
+        }else{
+
         }
         return u
     }

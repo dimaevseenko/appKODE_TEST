@@ -9,7 +9,7 @@ class UsersViewModel: ViewModel() {
 
     private val usersLiveData = MutableLiveData<Users?>()
 
-    private fun getUsers(listener: LoadUserListener? = null): Users?{
+    fun getUsers(listener: LoadUserListener? = null): Users?{
         if(usersLiveData.value == null)
             Loader().apply {
                 loadUsers {

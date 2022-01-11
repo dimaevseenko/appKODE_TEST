@@ -56,6 +56,11 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
         binding.recycler.adapter = getAdapter(users)
     }
 
+    fun updateSort(){
+        getAdapter().sortType = (parentFragment as MainFragment).getSortType()
+        getAdapter().updateUsers(viewModel.getUsers(null, getCategory())!!)
+    }
+
     override fun onUpdate() {
         viewModel.updateUsers(this, getCategory())
     }
@@ -73,6 +78,10 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
                     loadView()
                 } }).commit()
         }
+    }
+
+    fun getSort(): SortType{
+        return getAdapter().sortType
     }
 
     open fun getCategory(): String{

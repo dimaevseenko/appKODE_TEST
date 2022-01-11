@@ -7,13 +7,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import net.format_tv.test.fragments.users.UsersFragment
 import net.format_tv.test.fragments.users.categories.*
 
-class MainViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
+class MainViewPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun createFragment(position: Int): Fragment {
-        return getFragment(position)
+        return getNewFragment(position)
     }
 
-    private fun getFragment(position: Int): UsersFragment{
+    private fun getNewFragment(position: Int): UsersFragment{
         when(position){
             0 -> return UsersFragment()
             1 -> return DesignersUsersFragment()
@@ -30,6 +30,10 @@ class MainViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycl
             12 -> return SupportsUsersFragment()
         }
         return UsersFragment()
+    }
+
+    fun getFragment(position: Int): UsersFragment? {
+        return fragmentManager.findFragmentByTag("f$position") as? UsersFragment
     }
 
     override fun getItemCount(): Int {

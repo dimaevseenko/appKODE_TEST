@@ -33,7 +33,17 @@ class BottomSortSheet: BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.root.setBackgroundColor(Color.TRANSPARENT)
+
+        checkSorts()
+
         binding.radioButton.setOnClickListener { (parentFragment as MainFragment).setSortType(UsersFragment.SortType.ALPHABET) }
         binding.radioButton2.setOnClickListener { (parentFragment as MainFragment).setSortType(UsersFragment.SortType.DATE) }
+    }
+
+    private fun checkSorts(){
+        if((parentFragment as MainFragment).getCurrentViewPagerItemFragment()?.getSort() == UsersFragment.SortType.ALPHABET)
+            binding.radioButton.isChecked = true
+        else
+            binding.radioButton2.isChecked = true
     }
 }
