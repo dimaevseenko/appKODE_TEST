@@ -29,5 +29,6 @@ class UserFragment: Fragment(){
         binding.date.text = user.birthday
         binding.phone.text = user.phone
         binding.years.text = user.userTag
+        binding.imageView4.setImageResource(R.drawable.ic_full)
     }
 }

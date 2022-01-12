@@ -70,7 +70,7 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
         fun bind(user: User, listener: UsersAdapterListener?, search: String){
             search(binding.root.layoutParams, user.firstName+" "+user.lastName, search)
 
-            binding.imageView.setImageResource(R.drawable.ic_user)
+            binding.imageView.setImageResource(R.drawable.ic_full)
             binding.name.text = "${user.firstName} ${user.lastName}"
             binding.department.text = user.department
             binding.item.setOnClickListener {
