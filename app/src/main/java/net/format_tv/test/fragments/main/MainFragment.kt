@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -36,6 +37,20 @@ class MainFragment: Fragment(){
         binding.mainViewPager.registerOnPageChangeCallback(getMainNavCallbacks())
         binding.mainViewPager.adapter = getMainViewPagerAdapter()
         binding.imageButtonSort.setOnClickListener { sort() }
+        binding.editTextTextPersonName2.addTextChangedListener {
+            search(it.toString())
+        }
+    }
+
+    private fun search(str: String){
+        if(str != "")
+                binding.imageButton.setColorFilter(Color.parseColor("#050510"))
+        else
+                binding.imageButton.colorFilter = null
+
+        (binding.mainViewPager.adapter as MainViewPagerAdapter).getFragment(binding.mainViewPager.currentItem)?.let {
+            it.search(str)
+        }
     }
 
     fun getSortType(): UsersFragment.SortType{

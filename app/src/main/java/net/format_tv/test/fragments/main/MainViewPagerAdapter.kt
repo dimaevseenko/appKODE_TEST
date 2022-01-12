@@ -7,7 +7,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import net.format_tv.test.fragments.users.UsersFragment
 import net.format_tv.test.fragments.users.categories.*
 
-class MainViewPagerAdapter(val fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
+class MainViewPagerAdapter(private val fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager, lifecycle) {
 
     override fun createFragment(position: Int): Fragment {
         return getNewFragment(position)

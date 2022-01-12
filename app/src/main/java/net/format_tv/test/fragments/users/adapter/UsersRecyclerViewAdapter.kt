@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import net.format_tv.test.R
 import net.format_tv.test.databinding.RecyclerViewUserItemBinding
@@ -13,6 +14,12 @@ import net.format_tv.test.models.Users
 import java.util.*
 
 class UsersRecyclerViewAdapter(private val context: Context, var users: Users, var sortType: UsersFragment.SortType): RecyclerView.Adapter<UsersRecyclerViewAdapter.ViewHolder>( ){
+
+    var search: String = ""
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     fun updateUsers(newUsers: Users){
         this.users = sort(newUsers)
@@ -49,7 +56,7 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
     }
 
     override fun onBindViewHolder(holder: UsersRecyclerViewAdapter.ViewHolder, position: Int) {
-        holder.bind(users[position], listener)
+        holder.bind(users[position], listener, search)
     }
 
     override fun getItemCount(): Int {
@@ -60,12 +67,25 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
 
         private var binding: RecyclerViewUserItemBinding = RecyclerViewUserItemBinding.bind(view)
 
-        fun bind(user: User, listener: UsersAdapterListener?){
+        fun bind(user: User, listener: UsersAdapterListener?, search: String){
+            search(binding.root.layoutParams, user.firstName+" "+user.lastName, search)
+
             binding.imageView.setImageResource(R.drawable.ic_user)
             binding.name.text = "${user.firstName} ${user.lastName}"
             binding.department.text = user.department
             binding.item.setOnClickListener {
                 listener?.onSelectUser(user, adapterPosition)
+            }
+        }
+
+        private fun search(params: ViewGroup.LayoutParams, userName: String, search: String){
+            if(search != ""){
+                if(!userName.contains(search, true))
+                    params.height = 0
+                else
+                    params.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }else{
+                params.height = ViewGroup.LayoutParams.WRAP_CONTENT
             }
         }
     }

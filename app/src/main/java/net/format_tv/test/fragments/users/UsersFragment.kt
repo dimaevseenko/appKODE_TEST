@@ -106,6 +106,10 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
         return updateSwipe!!
     }
 
+    fun search(str: String){
+        getAdapter().search = str
+    }
+
     override fun onSelectUser(user: User, position: Int) {
         parentFragment?.let {
             it.parentFragmentManager.beginTransaction()
