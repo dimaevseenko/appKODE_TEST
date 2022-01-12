@@ -19,6 +19,12 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
         notifyDataSetChanged()
     }
 
+    private var listener: UsersAdapterListener? = null
+
+    fun setListener(listener: UsersAdapterListener){
+        this.listener = listener
+    }
+
     private fun sort(users: Users): Users{
         val u = Users()
         users.forEach { user ->
@@ -43,7 +49,7 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
     }
 
     override fun onBindViewHolder(holder: UsersRecyclerViewAdapter.ViewHolder, position: Int) {
-        holder.bind(users[position])
+        holder.bind(users[position], listener)
     }
 
     override fun getItemCount(): Int {
@@ -54,10 +60,17 @@ class UsersRecyclerViewAdapter(private val context: Context, var users: Users, v
 
         private var binding: RecyclerViewUserItemBinding = RecyclerViewUserItemBinding.bind(view)
 
-        fun bind(user: User){
+        fun bind(user: User, listener: UsersAdapterListener?){
             binding.imageView.setImageResource(R.drawable.ic_user)
             binding.name.text = "${user.firstName} ${user.lastName}"
             binding.department.text = user.department
+            binding.item.setOnClickListener {
+                listener?.onSelectUser(user, adapterPosition)
+            }
         }
+    }
+
+    interface UsersAdapterListener{
+        fun onSelectUser(user: User, position: Int)
     }
 }

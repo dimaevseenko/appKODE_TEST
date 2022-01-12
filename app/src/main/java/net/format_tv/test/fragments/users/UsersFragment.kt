@@ -18,9 +18,10 @@ import net.format_tv.test.fragments.error.ErrorFragment
 import net.format_tv.test.fragments.main.MainFragment
 import net.format_tv.test.fragments.users.adapter.UsersRecyclerViewAdapter
 import net.format_tv.test.fragments.users.swipe.SwipeHelper
+import net.format_tv.test.models.User
 import net.format_tv.test.models.Users
 
-open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.SwipeListener {
+open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelper.SwipeListener, UsersRecyclerViewAdapter.UsersAdapterListener {
 
     private lateinit var binding: FragmentUsersBinding
     private lateinit var viewModel: UsersViewModel
@@ -54,6 +55,7 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
 
         binding.recycler.layoutManager = LinearLayoutManager(requireContext())
         binding.recycler.adapter = getAdapter(users)
+        getAdapter().setListener(this)
     }
 
     fun updateSort(){
@@ -102,6 +104,15 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
         if(updateSwipe == null)
             updateSwipe = SwipeHelper()
         return updateSwipe!!
+    }
+
+    override fun onSelectUser(user: User, position: Int) {
+        parentFragment?.let {
+            it.parentFragmentManager.beginTransaction()
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.fragmentContainerView, UserFragment().apply { arguments = Bundle().apply {
+                    putParcelable("user", user)
+                } }, "UserFragment").commit()
+        }
     }
 
     enum class SortType{

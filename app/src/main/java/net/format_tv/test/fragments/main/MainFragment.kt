@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import net.format_tv.test.R
@@ -68,6 +69,15 @@ class MainFragment: Fragment(){
             )
         return mainNavCallbacks!!
     }
+
+     fun onBackPressed(): Boolean{
+         val f = parentFragmentManager.findFragmentByTag("UserFragment")
+         if(f != null){
+             parentFragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).remove(f).commit()
+             return true
+         }
+        return false
+     }
 
     private fun getMainViewPagerAdapter(): MainViewPagerAdapter{
         return MainViewPagerAdapter(
