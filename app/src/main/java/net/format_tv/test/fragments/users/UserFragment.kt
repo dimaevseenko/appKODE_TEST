@@ -83,7 +83,6 @@ class UserFragment: Fragment(), View.OnTouchListener{
                 return true
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->{
-                println(velocityY)
                 tracker.recycle()
 
                 if(velocityY>5500f)
@@ -105,7 +104,12 @@ class UserFragment: Fragment(), View.OnTouchListener{
             friction = 1.1f
             setMaxValue(0f)
             setMaxValue(10000f)
-            addEndListener { animation, canceled, value, velocity -> if (!canceled) endAnimation() }
+            addUpdateListener { animation, value, velocity ->
+                if(v.translationY>v.height){
+                    cancel()
+                    dismiss()
+                }
+            }
             start()
         }
     }
