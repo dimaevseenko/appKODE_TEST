@@ -112,6 +112,7 @@ open class UsersFragment: Fragment(), UsersViewModel.LoadUserListener, SwipeHelp
 
     override fun onSelectUser(user: User, position: Int) {
         parentFragment?.let {
+            if(it.parentFragmentManager.findFragmentByTag("UserFragment") as? UserFragment == null)
             it.parentFragmentManager.beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(R.id.fragmentContainerView, UserFragment().apply { arguments = Bundle().apply {
                     putParcelable("user", user)

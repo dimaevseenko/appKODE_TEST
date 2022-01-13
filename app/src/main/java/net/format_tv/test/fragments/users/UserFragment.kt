@@ -33,7 +33,9 @@ class UserFragment: Fragment(), View.OnTouchListener{
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        animateY(binding.root, 2000f, 0f)
+        if (savedInstanceState == null)
+            animateY(binding.root, 2000f, 0f)
+
         user = arguments?.getParcelable<User>("user") as User
         binding.imageButtonCancel.setOnClickListener { dismiss() }
         binding.name.text = user.firstName+" "+user.lastName
