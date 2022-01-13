@@ -2,10 +2,13 @@ package net.format_tv.test.fragments.users
 
 import android.animation.Animator
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.*
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
+import androidx.dynamicanimation.animation.SpringAnimation
+import androidx.dynamicanimation.animation.SpringForce
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
@@ -24,12 +27,13 @@ class UserFragment: Fragment(), View.OnTouchListener{
 
     private lateinit var tracker: VelocityTracker
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentUserBinding.bind(inflater.inflate(R.layout.fragment_user, container, false))
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        animateY(binding.root, 2000f, 0f)
         user = arguments?.getParcelable<User>("user") as User
         binding.imageButtonCancel.setOnClickListener { dismiss() }
         binding.name.text = user.firstName+" "+user.lastName
@@ -92,7 +96,7 @@ class UserFragment: Fragment(), View.OnTouchListener{
                 else if(v.translationY > v.height/1.5)
                     dismiss()
                 else
-                    animateY(v, 0f)
+                    animateY(v, v.translationY, 0f)
             }
         }
         return false
@@ -107,18 +111,31 @@ class UserFragment: Fragment(), View.OnTouchListener{
             addUpdateListener { animation, value, velocity ->
                 if(v.translationY>v.height){
                     cancel()
-                    dismiss()
+                    endAnimation()
                 }
+            }
+            addEndListener { animation, canceled, value, velocity ->
+                if(!canceled)
+                    endAnimation()
             }
             start()
         }
     }
 
-    private fun animateY(v: View, toY: Float){
-        ObjectAnimator.ofFloat(v, View.TRANSLATION_Y, v.translationY, toY).apply {
+    private fun animateY(v: View, fromY: Float, toY: Float){
+        ValueAnimator.ofFloat(fromY, toY).apply {
             interpolator = FastOutSlowInInterpolator()
             this.duration = 500
+            addUpdateListener {
+                v.translationY = animatedValue as Float
+            }
             start()
         }
+
+//        ObjectAnimator.ofFloat(v, View.TRANSLATION_Y, fromY, toY).apply {
+//            interpolator = FastOutSlowInInterpolator()
+//            this.duration = 500
+//            start()
+//        }
     }
 }
