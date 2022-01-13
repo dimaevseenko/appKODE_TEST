@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
 import net.format_tv.test.R
 import net.format_tv.test.databinding.FragmentMainBinding
+import net.format_tv.test.fragments.users.UserFragment
 import net.format_tv.test.fragments.users.UsersFragment
 import net.format_tv.test.fragments.users.sheet.BottomSortSheet
 
@@ -86,10 +87,9 @@ class MainFragment: Fragment(){
     }
 
      fun onBackPressed(): Boolean{
-         val f = parentFragmentManager.findFragmentByTag("UserFragment")
-         if(f != null){
-             parentFragmentManager.beginTransaction().setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE).remove(f).commit()
-             return true
+         val f = parentFragmentManager.findFragmentByTag("UserFragment") as? UserFragment
+         f?.let {
+             return f.dismiss()
          }
         return false
      }
