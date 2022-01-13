@@ -85,7 +85,7 @@ class UserFragment: Fragment(), View.OnTouchListener{
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL ->{
                 tracker.recycle()
 
-                if(velocityY>5500f)
+                if(velocityY>5000f)
                     flingAnimateY(v, velocityY){
                         dismiss()
                     }
